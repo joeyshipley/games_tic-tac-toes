@@ -16,3 +16,9 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+# Apple Stuff
+.DS_Store
+
+# Rubymine
+.idea/
