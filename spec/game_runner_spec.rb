@@ -13,7 +13,7 @@ describe "When the game starts" do
   end
 
   it "shows the human the tic-tac-toe board" do
-    @game_runner.should_receive(:draw_game_board)
+    @game_runner.should_receive(:display_game_board)
     @game_runner.start
   end
 
@@ -30,7 +30,7 @@ describe "When the game runner displays a message" do
   end
 
   it "sends the message to the console" do
-    $stdout.should_receive(:puts).at_least(1)
+    @game_runner.should_receive(:draw).at_least(1)
     @game_runner.display_message(:game_start)
   end
 end
@@ -43,15 +43,38 @@ describe "When the displaying a message" do
 
   describe "that is about the start of the game" do
     it "says something about it being a tic-tac-toe game" do
-      $stdout.should_receive(:puts).once.with(/Tic-Tac-Toe/i)
+      @game_runner.should_receive(:draw).once.with(/Tic-Tac-Toe/i)
       @game_runner.display_message(:game_start)
     end
   end
 
   describe "that is about the human needing to perform their move" do
     it "says something about the human picking their move" do
-      $stdout.should_receive(:puts).once.with(/(choose a move)|(choose your move)/i)
+      @game_runner.should_receive(:draw).once.with(/(choose a move)|(choose your move)/i)
       @game_runner.display_message(:ask_for_human_move)
     end
   end
+end
+
+describe "When the game board is drawn" do
+
+  before(:each) do
+    @game_runner = GameRunner.new
+  end
+
+  describe "And no moves have been made yet" do
+    it "draws the board with the numeric values" do
+      board = nil
+      @game_runner.stub(:draw) do |arg|
+        board = arg
+      end
+
+      @game_runner.display_game_board
+
+      patternMatch = board =~ /1.*2.*3.*4.*5.*6.*7.*8.*9/m
+      hasDisplayedBoardCorrectly = patternMatch.nil? ? false : true
+      hasDisplayedBoardCorrectly.should == true
+    end
+  end
+
 end
