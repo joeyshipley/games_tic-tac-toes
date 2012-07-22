@@ -1,23 +1,17 @@
 class GameRunner
   # current responsibilities:
   # 1. manages running the game
-  # 2. determines what message to display
-  # 3. turning a game board into a displayable format
-  def initialize(ux_interactor)
+  # 2. turning a game board into a displayable format
+  def initialize(ux_interactor, game_message_provider)
     @ux_interactor = ux_interactor
+    @message_provider = game_message_provider
   end
 
   def start
-    send_to_display :game_start
-    send_to_display :game_board
-    send_to_display :ask_for_human_move
+    @ux_interactor.draw @message_provider.game_start
+    @ux_interactor.draw game_board_to_s
+    @ux_interactor.draw @message_provider.ask_for_human_move
     @ux_interactor.receive_input
-  end
-
-  def send_to_display(msg_type)
-    @ux_interactor.draw "Welcome to a friendly game of Tic-Tac-Toe" if msg_type == :game_start
-    @ux_interactor.draw "Please choose a move." if msg_type == :ask_for_human_move
-    @ux_interactor.draw game_board_to_s if msg_type == :game_board
   end
 
   def game_board_to_s
