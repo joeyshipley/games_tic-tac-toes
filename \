@@ -57,7 +57,7 @@ describe GameRunner do
   describe "When the human provides a move" do
     describe "and the move is valid" do
       it "will display the move as an X" do
-        @ux_interactor.should_receive(:receive_input).and_return("1")
+        @ux_interactor.stub(:receive_input).and_return("1")
         @game_runner.start
         result = @game_runner.game_board_to_s
 
@@ -65,17 +65,6 @@ describe GameRunner do
         hasDisplayedBoardCorrectly = patternMatch.nil? ? false : true
         hasDisplayedBoardCorrectly.should == true
       end
-    end
-  end
-
-  describe "When the computer has a move applied" do
-    it "will display the move as an O" do
-      @game_runner.assign_move(1, :computer)
-      result = @game_runner.game_board_to_s
-
-      patternMatch = result =~ /O.*2.*3.*4.*5.*6.*7.*8.*9/m
-      hasDisplayedBoardCorrectly = patternMatch.nil? ? false : true
-      hasDisplayedBoardCorrectly.should == true
     end
   end
 end
