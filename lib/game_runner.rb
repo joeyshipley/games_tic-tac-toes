@@ -4,6 +4,7 @@ class GameRunner
   # 2. turning a game board into a displayable format
   # 3. maintaining the board/moves
   # 4. building the initial game board
+  # 5. validates the players move
 
   attr_accessor :moves
 
@@ -18,8 +19,16 @@ class GameRunner
     @ux_interactor.draw game_board_to_s
     @ux_interactor.draw @message_provider.ask_for_human_move
 
-    human_choice = @ux_interactor.receive_input
-    assign_move(human_choice.to_i, :human) unless human_choice.nil?
+    human_choice = @ux_interactor.receive_input.to_i
+    is_move_taken = move_is_taken(human_choice)
+    @ux_interactor.draw @message_provider.move_already_taken if is_move_taken
+    update_move(human_choice, :human) unless human_choice.nil? or is_move_taken
+  end
+
+  def move_is_taken(square)
+    move = @moves.find { |move| move.square == square }
+    return true unless move.nil? or move.owner == :none
+    return false
   end
 
   def build_game_board
@@ -66,24 +75,15 @@ class GameRunner
     return board
   end
 
-  def get_display_value_for_move_owner( moves, square )
-    move = get_move_from(moves, square)
+  def get_display_value_for_move_owner(moves, square)
+    move = moves.find { |move| move.square == square }
     return "X" if move.owner == :human
     return "O" if move.owner == :computer
     return square if move.owner == :none
   end
 
-  def assign_move( square, owner )
-    update_move_from(@moves, square, owner)
-  end
-
-  def update_move_from( moves, square, owner )
-    move = get_move_from(moves, square)
+  def update_move(square, owner)
+    move = @moves.find { |move| move.square == square }
     move.owner = owner
-  end
-
-  def get_move_from( moves, square )
-    move = moves.find { |move| move.square == square }
-    return move
   end
 end

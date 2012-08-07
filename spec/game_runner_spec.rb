@@ -4,10 +4,11 @@ describe GameRunner do
   before(:each) do
     @ux_interactor = double("console_interactor")
     @ux_interactor.stub(:draw)
-    @ux_interactor.stub(:receive_input)
+    @ux_interactor.stub(:receive_input).and_return("1")
     @message_provider = double("game_message_provider")
     @message_provider.stub(:game_start)
     @message_provider.stub(:ask_for_human_move)
+    @message_provider.stub(:move_already_taken)
     @game_runner = GameRunner.new @ux_interactor, @message_provider
   end
 
@@ -66,11 +67,29 @@ describe GameRunner do
         hasDisplayedBoardCorrectly.should == true
       end
     end
+
+    describe "and the move has already been taken" do
+      before(:each) do
+        @game_runner.update_move(1, :computer)
+        @ux_interactor.should_receive(:receive_input).and_return("1")
+      end
+
+      it "will display a validation message" do
+        @message_provider.should_receive(:move_already_taken).once
+        @game_runner.start
+      end
+
+      it "will not update the owner" do
+        @game_runner.start
+        move = @game_runner.moves.find{ |move| move.square == 1 }
+        move.owner.should equal(:computer)
+      end
+    end
   end
 
   describe "When the computer has a move applied" do
     it "will display the move as an O" do
-      @game_runner.assign_move(1, :computer)
+      @game_runner.update_move(1, :computer)
       result = @game_runner.game_board_to_s
 
       patternMatch = result =~ /O.*2.*3.*4.*5.*6.*7.*8.*9/m

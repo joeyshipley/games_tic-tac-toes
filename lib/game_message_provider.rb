@@ -6,4 +6,8 @@ class GameMessageProvider
   def ask_for_human_move
     return "Please choose a move."
   end
+
+  def move_already_taken
+    return "Sorry, that move has already been taken, please try another."
+  end
 end
