@@ -20,9 +20,19 @@ class GameRunner
     @ux_interactor.draw @message_provider.ask_for_human_move
 
     human_choice = @ux_interactor.receive_input.to_i
-    is_move_taken = move_is_taken(human_choice)
-    @ux_interactor.draw @message_provider.move_already_taken if is_move_taken
-    update_move(human_choice, :human) unless human_choice.nil? or is_move_taken
+    is_move_valid = move_is_valid(human_choice)
+    unless is_move_valid
+      @ux_interactor.draw @message_provider.invalid_move
+    else
+      is_move_taken = move_is_taken(human_choice)
+      @ux_interactor.draw @message_provider.move_already_taken if is_move_taken
+      update_move(human_choice, :human) unless human_choice.nil? or is_move_taken
+    end
+  end
+
+  def move_is_valid(square)
+    patternMatch = square.to_s =~ /[1-9]/
+    return patternMatch.nil? ? false : true
   end
 
   def move_is_taken(square)

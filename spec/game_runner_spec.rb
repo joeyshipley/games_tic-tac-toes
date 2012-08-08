@@ -85,6 +85,35 @@ describe GameRunner do
         move.owner.should equal(:computer)
       end
     end
+
+    describe "and the move is not a valid board move" do
+      it "will display a validation messave for a response that was empty" do
+        @ux_interactor.should_receive(:receive_input).and_return("")
+        @message_provider.should_receive(:invalid_move).once
+        @game_runner.start
+
+        selected_moves = @game_runner.moves.select { |move| move.owner != :none }
+        selected_moves.length.should equal(0)
+      end
+
+      it "will display a validation message for a number out of the range" do
+        @ux_interactor.should_receive(:receive_input).and_return("0")
+        @message_provider.should_receive(:invalid_move).once
+        @game_runner.start
+
+        selected_moves = @game_runner.moves.select { |move| move.owner != :none }
+        selected_moves.length.should equal(0)
+      end
+
+      it "will display a validation message for a non-number" do
+        @ux_interactor.should_receive(:receive_input).and_return("A")
+        @message_provider.should_receive(:invalid_move).once
+        @game_runner.start
+
+        selected_moves = @game_runner.moves.select { |move| move.owner != :none }
+        selected_moves.length.should equal(0)
+      end
+    end
   end
 
   describe "When the computer has a move applied" do
