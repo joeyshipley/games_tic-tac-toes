@@ -19,35 +19,25 @@ class GameBoard
   end
 
   def for_display
-    square1 = get_display_value_for_tile_owner(1)
-    square2 = get_display_value_for_tile_owner(2)
-    square3 = get_display_value_for_tile_owner(3)
-    square4 = get_display_value_for_tile_owner(4)
-    square5 = get_display_value_for_tile_owner(5)
-    square6 = get_display_value_for_tile_owner(6)
-    square7 = get_display_value_for_tile_owner(7)
-    square8 = get_display_value_for_tile_owner(8)
-    square9 = get_display_value_for_tile_owner(9)
-
     board = ""
     board += "                   \n"
     board += "      |     |      \n"
-    board += "   #{square1}  |  #{square2}  |  #{square3}   \n"
+    board += "   #{tile_display(1)}  |  #{tile_display(2)}  |  #{tile_display(3)}   \n"
     board += "      |     |      \n"
     board += " ----- ----- ----- \n"
     board += "      |     |      \n"
-    board += "   #{square4}  |  #{square5}  |  #{square6}   \n"
+    board += "   #{tile_display(4)}  |  #{tile_display(5)}  |  #{tile_display(6)}   \n"
     board += "      |     |      \n"
     board += " ----- ----- ----- \n"
     board += "      |     |      \n"
-    board += "   #{square7}  |  #{square8}  |  #{square9}   \n"
+    board += "   #{tile_display(7)}  |  #{tile_display(8)}  |  #{tile_display(9)}   \n"
     board += "      |     |      \n"
     board += "                   \n"
 
     return board
   end
 
-  def get_display_value_for_tile_owner(square)
+  def tile_display(square)
     tile = @tiles.find { |tile| tile[:square] == square }
     return "X" if tile[:owner] == :player
     return "O" if tile[:owner] == :computer
