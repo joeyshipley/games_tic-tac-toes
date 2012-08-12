@@ -49,4 +49,28 @@ describe 'GameBoard' do
       move_owner.should equal(:computer)
     end
   end
+
+  describe "When validating a move" do
+    describe "that has already been taken" do
+      it "returns that it is not valid" do
+        @board.apply_move(:player, 1)
+        result = @board.is_tile_available(1)
+        result.should equal(false)
+      end
+    end
+
+    describe "that is a letter" do
+      it "returns that it is not valid" do
+        result = @board.is_tile_valid("A")
+        result.should equal(false)
+      end
+    end
+
+    describe "that is out of the tile range" do
+      it "returns that it is not valid" do
+        result = @board.is_tile_valid(0)
+        result.should equal(false)
+      end
+    end
+  end
 end

@@ -13,6 +13,16 @@ class GameBoard
     tile[:owner]
   end
 
+  def is_tile_available(square)
+    tile = @tiles.find { |tile| tile[:square] == square }
+    tile[:owner] == :none
+  end
+
+  def is_tile_valid(square)
+    valid_tiles = @tiles.select { |tile| tile[:square] == square }
+    valid_tiles.length > 0
+  end
+
   def apply_move(owner, square)
     tile = @tiles.find { |tile| tile[:square] == square }
     tile[:owner] = owner
