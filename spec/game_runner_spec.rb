@@ -11,6 +11,7 @@ describe GameRunner do
     runner.stub(:input) { "1" }
     board.stub(:is_tile_available) { true }
     board.stub(:is_tile_valid) { true }
+    board.stub(:apply_move)
   end
 
   describe "During a game turn" do
@@ -41,7 +42,7 @@ describe GameRunner do
   describe "When a move is provided from the player" do
     it "applies the move to the board" do
       runner.stub(:input) { "1" }
-      board.should_receive(:apply_move).with(:player, 1)
+      board.should_receive(:apply_move).once.with(:player, "1")
       runner.perform_turn
     end
 
@@ -74,6 +75,19 @@ describe GameRunner do
         pattern_match = ui =~ /invalid choice/m
         is_match = pattern_match.nil? ? false : true
         is_match.should == true
+      end
+    end
+
+    describe "When it is the computers turn" do
+      it "has the computer actually make a move" do
+        board.should_receive(:apply_move).once.with(:computer, anything())
+        runner.perform_turn
+      end
+
+      it "only performs a move that is available" do
+        board.tiles[0][:owner] = :player
+        board.should_receive(:apply_move).once.with(:computer, /[2-9]/)
+        runner.perform_turn
       end
     end
   end

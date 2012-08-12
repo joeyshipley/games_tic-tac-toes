@@ -3,7 +3,7 @@ class GameBoard
 
   def initialize
     @tiles = []
-    (1..9).each do |i|
+    ("1".."9").each do |i|
       @tiles.push({ :square => i, :owner => :none })
     end
   end
@@ -32,15 +32,15 @@ class GameBoard
     board = ""
     board += "                   \n"
     board += "      |     |      \n"
-    board += "   #{tile_display(1)}  |  #{tile_display(2)}  |  #{tile_display(3)}   \n"
+    board += "   #{tile_display("1")}  |  #{tile_display("2")}  |  #{tile_display("3")}   \n"
     board += "      |     |      \n"
     board += " ----- ----- ----- \n"
     board += "      |     |      \n"
-    board += "   #{tile_display(4)}  |  #{tile_display(5)}  |  #{tile_display(6)}   \n"
+    board += "   #{tile_display("4")}  |  #{tile_display("5")}  |  #{tile_display("6")}   \n"
     board += "      |     |      \n"
     board += " ----- ----- ----- \n"
     board += "      |     |      \n"
-    board += "   #{tile_display(7)}  |  #{tile_display(8)}  |  #{tile_display(9)}   \n"
+    board += "   #{tile_display("7")}  |  #{tile_display("8")}  |  #{tile_display("9")}   \n"
     board += "      |     |      \n"
     board += "                   \n"
 

@@ -9,11 +9,20 @@ class GameRunner
 
   def perform_turn
     output display_board
-    player_choice = ask_for_player_move
+    perform_player_action
+    perform_computer_action
+  end
 
+  def perform_player_action
+    player_choice = ask_for_player_move
     if validate_move(player_choice)
       @board.apply_move(:player, player_choice)
     end
+  end
+
+  def perform_computer_action
+    available_moves = @board.tiles.select { |tile| tile[:owner] == :none }
+    @board.apply_move(:computer, available_moves[0][:square])
   end
 
   def output(message)
@@ -30,7 +39,7 @@ class GameRunner
 
   def ask_for_player_move
     output 'Please choose your move:'
-    input.to_i
+    input
   end
 
   def validate_move(square)
