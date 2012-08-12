@@ -1,30 +1,21 @@
-require 'board_move'
-
 class GameBoard
   attr_accessor :moves
 
   def initialize
-    @moves = [
-      BoardMove.new( 1, :none ),
-      BoardMove.new( 2, :none ),
-      BoardMove.new( 3, :none ),
-      BoardMove.new( 4, :none ),
-      BoardMove.new( 5, :none ),
-      BoardMove.new( 6, :none ),
-      BoardMove.new( 7, :none ),
-      BoardMove.new( 8, :none ),
-      BoardMove.new( 9, :none )
-    ]
+    @moves = []
+    (1..9).each do |i|
+      @moves.push({ :square => i, :owner => :none })
+    end
   end
 
   def get_move_owner(square)
-    move = @moves.find { |move| move.square == square }
-    move.owner
+    move = @moves.find { |move| move[:square] == square }
+    move[:owner]
   end
 
   def apply_move(owner, square)
-    move = @moves.find { |move| move.square == square }
-    move.owner = owner
+    move = @moves.find { |move| move[:square] == square }
+    move[:owner] = owner
   end
 
   def for_display

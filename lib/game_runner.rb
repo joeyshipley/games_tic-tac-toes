@@ -12,7 +12,8 @@ class GameRunner
     @ui = display_board
     @ui += 'Please choose your move:'
     output @ui
-    input
+    player_choice = input.to_i
+    @board.apply_move(:player, player_choice)
   end
 
   def output(message)
