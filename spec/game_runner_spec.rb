@@ -14,6 +14,20 @@ describe GameRunner do
     board.stub(:apply_move)
   end
 
+  describe "When the game starts" do
+    it "will perform a game turn" do
+      runner.should_receive(:perform_turn).at_least(1)
+      runner.start
+    end
+  end
+
+  describe "After a turn has been played through" do
+    it "will peform another turn" do
+      runner.should_receive(:perform_turn).at_least(2)
+      runner.start
+    end
+  end
+
   describe "During a game turn" do
     it "shows us the board" do
       runner.should_receive(:display_board)

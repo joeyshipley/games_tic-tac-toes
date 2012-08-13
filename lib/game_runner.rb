@@ -7,6 +7,14 @@ class GameRunner
     @board = GameBoard.new
   end
 
+  def start
+    turns_performed = 0
+    while turns_performed < 2 do
+      perform_turn
+      turns_performed += 1
+    end
+  end
+
   def perform_turn
     output display_board
     perform_player_action
@@ -57,6 +65,6 @@ class GameRunner
   end
 
   def is_move_valid(square)
-    @board.is_tile_valid
+    @board.is_tile_valid(square)
   end
 end
