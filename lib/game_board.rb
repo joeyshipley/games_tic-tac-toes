@@ -1,5 +1,6 @@
 class GameBoard
   attr_accessor :tiles
+  attr_accessor :tile_set_size
 
   def initialize
     @tiles = []
