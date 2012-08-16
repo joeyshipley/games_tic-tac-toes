@@ -1,12 +1,25 @@
 class GameBoard
   attr_accessor :tiles
-  attr_accessor :tile_set_size
+  attr_reader :tile_set_identifiers
 
   def initialize
     @tiles = []
     ("1".."9").each do |i|
       @tiles.push({ :square => i, :owner => :none })
     end
+
+    # Refactor needed to make this readable. This is a list of the winning
+    # combos: rows, columns and diagonals for a 3x3 board...
+    @tile_set_identifiers = [
+      ["1", "2", "3"],
+      ["4", "5", "6"],
+      ["7", "8", "9"],
+      ["1", "4", "7"],
+      ["2", "5", "8"],
+      ["3", "6", "9"],
+      ["1", "5", "9"],
+      ["7", "5", "3"]
+    ]
   end
 
   def get_tile_owner(square)

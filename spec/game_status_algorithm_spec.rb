@@ -4,12 +4,13 @@ describe GameStatusAlgorithm do
 
   let(:status_algo) { GameStatusAlgorithm.new }
   let(:board) { GameBoard.new }
+  let(:players) { [:player, :computer ] }
 
   describe "When checking to see who the winner is" do
 
     describe "and no one has won" do
       it "lets us know that no one has won the game." do
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:none)
       end
     end
@@ -20,7 +21,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "2")
         board.apply_move(:player, "3")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
 
@@ -29,7 +30,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "5")
         board.apply_move(:player, "6")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
 
@@ -38,7 +39,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "8")
         board.apply_move(:player, "9")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
     end
@@ -49,7 +50,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "2")
         board.apply_move(:computer, "3")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
 
@@ -58,7 +59,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "5")
         board.apply_move(:computer, "6")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
 
@@ -67,7 +68,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "8")
         board.apply_move(:computer, "9")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
     end
@@ -78,7 +79,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "4")
         board.apply_move(:player, "7")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
 
@@ -87,7 +88,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "5")
         board.apply_move(:player, "8")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
 
@@ -96,7 +97,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "6")
         board.apply_move(:player, "9")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
     end
@@ -107,7 +108,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "4")
         board.apply_move(:computer, "7")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
 
@@ -116,7 +117,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "5")
         board.apply_move(:computer, "8")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
 
@@ -125,7 +126,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "6")
         board.apply_move(:computer, "9")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
     end
@@ -136,7 +137,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "5")
         board.apply_move(:player, "9")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
 
@@ -145,7 +146,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:player, "5")
         board.apply_move(:player, "3")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:player)
       end
     end
@@ -156,7 +157,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "5")
         board.apply_move(:computer, "9")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
 
@@ -165,7 +166,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "5")
         board.apply_move(:computer, "3")
 
-        result = status_algo.check_status(board)
+        result = status_algo.check_status(board, players)
         result.should equal(:computer)
       end
     end
