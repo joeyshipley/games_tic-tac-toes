@@ -1,31 +1,36 @@
 require 'game_board'
+require 'game_status_algorithm'
 
 class GameRunner
   attr_accessor :board
 
   def initialize
     @board = GameBoard.new
+    @game_status = GameStatusAlgorithm.new
+    @players = [ :player, :computer ]
   end
 
   def start
-    turns_performed = 0
-    while turns_performed < 2 do
+    winner = :none
+    while winner == :none do
       perform_turn
-      turns_performed += 1
+      winner = @game_status.check_status(@board, @players)
     end
   end
 
   def perform_turn
     output display_board
-    perform_player_action
-    perform_computer_action
+    player_took_action = perform_player_action
+    perform_computer_action if player_took_action
   end
 
   def perform_player_action
     player_choice = ask_for_player_move
     if validate_move(player_choice)
       @board.apply_move(:player, player_choice)
+      return true
     end
+    false
   end
 
   def perform_computer_action

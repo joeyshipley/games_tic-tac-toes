@@ -4,14 +4,20 @@ describe GameRunner do
 
   let(:runner) { GameRunner.new }
   let!(:board) { GameBoard.new }
+  let!(:game_status) { GameStatusAlgorithm.new }
 
   before(:each) do
     GameBoard.stub(:new) { board }
-    runner.stub(:output) # to keep the test runner from being cluttered with the games various 'puts' calls.
+    GameStatusAlgorithm.stub(:new) { game_status }
+
+    runner.stub(:output) # tests get cluttered from the actual 'puts' calls.
     runner.stub(:input) { "1" }
+
     board.stub(:is_tile_available) { true }
     board.stub(:is_tile_valid) { true }
     board.stub(:apply_move)
+
+    game_status.stub(:check_status).and_return(:player)
   end
 
   describe "When the game starts" do
@@ -22,8 +28,21 @@ describe GameRunner do
   end
 
   describe "After a turn has been played through" do
-    it "will peform another turn" do
-      runner.should_receive(:perform_turn).at_least(2)
+    it "will play more turns until the game is over" do
+      game_status.stub(:check_status).and_return(:none, :none, :player)
+      runner.should_receive(:perform_turn).at_least(3)
+      runner.start
+    end
+
+    it "will play more turns until the game is over" do
+      game_status.stub(:check_status).and_return(:none, :none, :none, :computer)
+      runner.should_receive(:perform_turn).at_least(4)
+      runner.start
+    end
+
+    it "will play more turns until the game is over" do
+      game_status.stub(:check_status).and_return(:none, :none, :none, :none, :draw)
+      runner.should_receive(:perform_turn).at_least(5)
       runner.start
     end
   end
@@ -93,6 +112,14 @@ describe GameRunner do
     end
 
     describe "When it is the computers turn" do
+      describe "and the players move was not valid" do
+        it "does not make the computers move" do
+          board.should_not_receive(:apply_move).with(:computer, anything())
+          runner.stub(:is_move_valid) { false }
+          runner.perform_turn
+        end
+      end
+
       it "has the computer actually make a move" do
         board.should_receive(:apply_move).once.with(:computer, anything())
         runner.perform_turn

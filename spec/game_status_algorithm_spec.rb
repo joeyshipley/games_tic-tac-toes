@@ -13,6 +13,21 @@ describe GameStatusAlgorithm do
         result = status_algo.check_status(board, players)
         result.should equal(:none)
       end
+
+      it "there was a tie" do
+        board.apply_move(:player, "1")
+        board.apply_move(:computer, "2")
+        board.apply_move(:player, "3")
+        board.apply_move(:computer, "7")
+        board.apply_move(:player, "4")
+        board.apply_move(:computer, "6")
+        board.apply_move(:player, "5")
+        board.apply_move(:computer, "9")
+        board.apply_move(:player, "8")
+
+        result = status_algo.check_status(board, players)
+        result.should equal(:draw)
+      end
     end
 
     describe "and the player has a set on a row" do
