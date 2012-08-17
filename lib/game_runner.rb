@@ -26,7 +26,14 @@ class GameRunner
     player_took_action = perform_player_action
     check_game_status
 
-    perform_computer_action if player_took_action && @winner == :none
+    # return if game_over
+    # return if player_did_not_go
+
+    # return if test_me == true
+    return unless player_took_action
+    return if @winner != :none
+
+    perform_computer_action 
   end
 
   def check_game_status
