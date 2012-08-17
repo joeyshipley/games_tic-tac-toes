@@ -27,6 +27,18 @@ describe GameRunner do
     end
   end
 
+  describe "When the game ends" do
+    it "shows us the last board" do
+      runner.should_receive(:display_board).at_least(2)
+      runner.start
+    end
+
+    it "shows the winning message" do
+      runner.should_receive(:display_winner).at_least(1)
+      runner.start
+    end
+  end
+
   describe "After a turn has been played through" do
     it "will play more turns until the game is over" do
       game_status.stub(:check_status).and_return(:none, :none, :player)

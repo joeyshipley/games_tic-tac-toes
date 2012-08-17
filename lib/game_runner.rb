@@ -16,6 +16,8 @@ class GameRunner
       perform_turn
       check_game_status
     end
+    output display_board
+    output display_winner
   end
 
   def perform_turn
@@ -78,5 +80,10 @@ class GameRunner
 
   def is_move_valid(square)
     @board.is_tile_valid(square)
+  end
+
+  def display_winner
+    return "The #{@winner} has won the game." if @winner == :computer || @winner == :player
+    return "Game was a tie." if @winner == :draw
   end
 end
