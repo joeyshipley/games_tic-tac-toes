@@ -112,6 +112,14 @@ describe GameRunner do
     end
 
     describe "When it is the computers turn" do
+      describe "and the player had won the game" do
+        it "does not make the computers move" do
+          game_status.stub(:check_status).and_return(:player)
+          board.should_not_receive(:apply_move).with(:computer, anything())
+          runner.perform_turn
+        end
+      end
+
       describe "and the players move was not valid" do
         it "does not make the computers move" do
           board.should_not_receive(:apply_move).with(:computer, anything())
@@ -121,11 +129,13 @@ describe GameRunner do
       end
 
       it "has the computer actually make a move" do
+        game_status.stub(:check_status).and_return(:none)
         board.should_receive(:apply_move).once.with(:computer, anything())
         runner.perform_turn
       end
 
       it "only performs a move that is available" do
+        game_status.stub(:check_status).and_return(:none)
         board.tiles[0][:owner] = :player
         board.should_receive(:apply_move).once.with(:computer, /[2-9]/)
         runner.perform_turn

@@ -11,17 +11,24 @@ class GameRunner
   end
 
   def start
-    winner = :none
-    while winner == :none do
+    @winner = :none
+    while @winner == :none do
       perform_turn
-      winner = @game_status.check_status(@board, @players)
+      check_game_status
     end
   end
 
   def perform_turn
     output display_board
+
     player_took_action = perform_player_action
-    perform_computer_action if player_took_action
+    check_game_status
+
+    perform_computer_action if player_took_action && @winner == :none
+  end
+
+  def check_game_status
+    @winner = @game_status.check_status(@board, @players)
   end
 
   def perform_player_action
