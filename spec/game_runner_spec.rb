@@ -66,16 +66,14 @@ describe GameRunner do
     end
 
     it "asks the player for their move" do
-      ui = nil
       runner.stub(:output) do |arg|
-        ui = arg
+        @ui = arg
       end
 
       runner.perform_turn
 
-      pattern_match = ui =~ /choose your move/m
-      is_match = pattern_match.nil? ? false : true
-      is_match.should == true
+      pattern_match = @ui =~ /choose your move/m
+      pattern_match.should_not be_nil
     end
 
     it "waits for the players input" do
@@ -93,17 +91,15 @@ describe GameRunner do
 
     describe "that has already been taken" do
       it "lets us know that it has been taken" do
-        ui = nil
         runner.stub(:output) do |arg|
-          ui = arg
+          @ui = arg
         end
 
         runner.stub(:is_move_available) { false }
         runner.perform_turn
 
-        pattern_match = ui =~ /already been taken/m
-        is_match = pattern_match.nil? ? false : true
-        is_match.should == true
+        pattern_match = @ui =~ /already been taken/m
+        pattern_match.should_not be_nil
       end
     end
 
@@ -118,8 +114,7 @@ describe GameRunner do
         runner.perform_turn
 
         pattern_match = ui =~ /invalid choice/m
-        is_match = pattern_match.nil? ? false : true
-        is_match.should == true
+        pattern_match.should_not be_nil
       end
     end
 
