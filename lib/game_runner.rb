@@ -1,5 +1,5 @@
 require 'game_board'
-require 'game_status_algorithm'
+require 'algorithms/game_status_algorithm'
 
 class GameRunner
   attr_accessor :board
