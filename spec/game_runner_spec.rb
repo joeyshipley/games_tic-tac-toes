@@ -27,16 +27,11 @@ describe GameRunner do
     end
 
     it "asks the player for their move" do
-      ui = nil
       runner.stub(:output) do |arg|
-        ui = arg
+        @ui = arg
       end
-
       runner.perform_turn
-
-      pattern_match = ui =~ /choose your move/m
-      is_match = pattern_match.nil? ? false : true
-      is_match.should == true
+      @ui.should match /choose your move/
     end
 
     it "waits for the players input" do
@@ -54,33 +49,25 @@ describe GameRunner do
 
     describe "that has already been taken" do
       it "lets us know that it has been taken" do
-        ui = nil
         runner.stub(:output) do |arg|
-          ui = arg
+          @ui = arg
         end
 
         runner.stub(:is_move_available) { false }
         runner.perform_turn
-
-        pattern_match = ui =~ /already been taken/m
-        is_match = pattern_match.nil? ? false : true
-        is_match.should == true
+        @ui.should match /already been taken/
       end
     end
 
     describe "that is not a legitimate move" do
       it "lets us know that it was not a valid tile" do
-        ui = nil
         runner.stub(:output) do |arg|
-          ui = arg
+          @ui = arg
         end
 
         runner.stub(:is_move_valid) { false }
         runner.perform_turn
-
-        pattern_match = ui =~ /invalid choice/m
-        is_match = pattern_match.nil? ? false : true
-        is_match.should == true
+        @ui.should match /invalid choice/
       end
     end
 
