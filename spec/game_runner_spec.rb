@@ -82,6 +82,7 @@ describe GameRunner do
 
       describe "and the players move was not valid" do
         it "does not make the computers move" do
+          game_status.stub(:check_status).and_return(:none)
           board.should_not_receive(:apply_move).with(:computer, anything())
           runner.stub(:is_move_valid) { false }
           runner.perform_turn
