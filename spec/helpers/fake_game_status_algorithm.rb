@@ -1,5 +1,5 @@
 class FakeGameStatusAlgorithm < GameStatusAlgorithm
-  def initialization
+  def initialization(players)
     @count = 0
     @rounds = 0
   end
@@ -9,7 +9,7 @@ class FakeGameStatusAlgorithm < GameStatusAlgorithm
     @rounds = rounds
   end
 
-  def check_status(board, players)
+  def check_status(board)
     return :player if @count >= @rounds
 
     @count += 1

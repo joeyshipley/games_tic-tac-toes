@@ -2,15 +2,14 @@ require 'spec_helper'
 
 describe GameStatusAlgorithm do
 
-  let(:status_algo) { GameStatusAlgorithm.new }
+  let(:status_algo) { GameStatusAlgorithm.new([ :player, :computer ]) }
   let(:board) { GameBoard.new }
-  let(:players) { [:player, :computer ] }
 
   describe "When checking to see who the winner is" do
 
     describe "and no one has won" do
       it "lets us know that no one has won the game." do
-        result = status_algo.check_status(board, players)
+        result = status_algo.check_status(board)
         result.should equal(:none)
       end
 
@@ -25,7 +24,7 @@ describe GameStatusAlgorithm do
         board.apply_move(:computer, "9")
         board.apply_move(:player, "8")
 
-        result = status_algo.check_status(board, players)
+        result = status_algo.check_status(board)
         result.should equal(:draw)
       end
     end
@@ -52,7 +51,7 @@ describe GameStatusAlgorithm do
 
   def assert_wins_with(owner, moves)
     apply_moves(owner, moves)
-    result = status_algo.check_status(board, players)
+    result = status_algo.check_status(board)
     result.should equal(owner)
   end
 

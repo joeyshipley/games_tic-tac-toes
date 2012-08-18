@@ -1,8 +1,12 @@
 require 'tiles'
 
 class GameStatusAlgorithm
-  def check_status(board, players)
+
+  def initialize(players)
     @players = players
+  end
+
+  def check_status(board)
     @winner = :none
     board.tile_set_identifiers.each do |set_squares|
       break unless @winner == :none

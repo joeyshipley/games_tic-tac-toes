@@ -5,7 +5,7 @@ describe GameRunner do
 
   let(:runner) { GameRunner.new }
   let!(:board) { GameBoard.new }
-  let!(:game_status) { FakeGameStatusAlgorithm.new }
+  let!(:game_status) { FakeGameStatusAlgorithm.new([]) }
 
   before(:each) do
     GameBoard.stub(:new) { board }

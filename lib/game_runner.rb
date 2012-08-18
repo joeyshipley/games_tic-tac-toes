@@ -6,8 +6,8 @@ class GameRunner
 
   def initialize
     @board = GameBoard.new
-    @game_status = GameStatusAlgorithm.new
     @players = [ :player, :computer ]
+    @game_status = GameStatusAlgorithm.new(@players)
   end
 
   def start
@@ -32,7 +32,7 @@ class GameRunner
   end
 
   def check_game_status
-    @winner = @game_status.check_status(@board, @players)
+    @winner = @game_status.check_status(@board)
   end
 
   def perform_player_action
