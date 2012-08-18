@@ -7,15 +7,11 @@ class GameStatusAlgorithm
       winner = get_winner_for_set(board.tiles, set_squares)
     end
 
-    return :draw if winner == :none && !has_available_moves(board.tiles)
+    return :draw if winner == :none && !board.has_available_tiles?
     winner
   end
 
   private
-
-  def has_available_moves(board_tiles)
-    board_tiles.select { |tile| tile[:owner] == :none }.length > 0
-  end
 
   def get_winner_for_set(all_tiles, set_squares)
     set_tiles = build_set_from(all_tiles, set_squares)

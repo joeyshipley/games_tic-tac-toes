@@ -22,14 +22,22 @@ class GameBoard
     ]
   end
 
-  def get_tile_owner(square)
-    tile = @tiles.find { |tile| tile[:square] == square }
-    tile[:owner]
+  def available_tiles
+    @tiles.select { |tile| tile[:owner] == :none }
+  end
+
+  def has_available_tiles?
+    self.available_tiles.length > 0
   end
 
   def is_tile_available(square)
     tile = @tiles.find { |tile| tile[:square] == square }
     tile[:owner] == :none
+  end
+
+  def get_tile_owner(square)
+    tile = @tiles.find { |tile| tile[:square] == square }
+    tile[:owner]
   end
 
   def is_tile_valid(square)
