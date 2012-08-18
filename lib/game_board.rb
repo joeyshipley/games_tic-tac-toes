@@ -1,9 +1,11 @@
+require 'tiles'
+
 class GameBoard
   attr_accessor :tiles
   attr_reader :tile_set_identifiers
 
   def initialize
-    @tiles = []
+    @tiles = Tiles.new
     ("1".."9").each do |i|
       @tiles.push({ :square => i, :owner => :none })
     end
@@ -23,7 +25,7 @@ class GameBoard
   end
 
   def available_tiles
-    @tiles.select { |tile| tile[:owner] == :none }
+    @tiles.available_tiles
   end
 
   def has_available_tiles?
@@ -31,12 +33,12 @@ class GameBoard
   end
 
   def is_tile_available(square)
-    tile = @tiles.find { |tile| tile[:square] == square }
-    tile[:owner] == :none
+    owner = get_tile_owner(square)
+    owner == :none
   end
 
   def get_tile_owner(square)
-    tile = @tiles.find { |tile| tile[:square] == square }
+    tile = @tiles.get_tile(square)
     tile[:owner]
   end
 
@@ -46,7 +48,7 @@ class GameBoard
   end
 
   def apply_move(owner, square)
-    tile = @tiles.find { |tile| tile[:square] == square }
+    tile = @tiles.get_tile(square)
     tile[:owner] = owner
   end
 
@@ -70,7 +72,7 @@ class GameBoard
   end
 
   def tile_display(square)
-    tile = @tiles.find { |tile| tile[:square] == square }
+    tile = @tiles.get_tile(square)
     return "X" if tile[:owner] == :player
     return "O" if tile[:owner] == :computer
     return square if tile[:owner] == :none
