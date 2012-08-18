@@ -20,45 +20,6 @@ describe GameRunner do
     game_status.stub(:check_status).and_return(:player)
   end
 
-  describe "When the game starts" do
-    it "will perform a game turn" do
-      runner.should_receive(:perform_turn).at_least(1)
-      runner.start
-    end
-  end
-
-  describe "When the game ends" do
-    it "shows us the last board" do
-      runner.should_receive(:display_board).at_least(2)
-      runner.start
-    end
-
-    it "shows the winning message" do
-      runner.should_receive(:display_winner).at_least(1)
-      runner.start
-    end
-  end
-
-  describe "After a turn has been played through" do
-    it "will play more turns until the game is over" do
-      game_status.stub(:check_status).and_return(:none, :none, :player)
-      runner.should_receive(:perform_turn).at_least(3)
-      runner.start
-    end
-
-    it "will play more turns until the game is over" do
-      game_status.stub(:check_status).and_return(:none, :none, :none, :computer)
-      runner.should_receive(:perform_turn).at_least(4)
-      runner.start
-    end
-
-    it "will play more turns until the game is over" do
-      game_status.stub(:check_status).and_return(:none, :none, :none, :none, :draw)
-      runner.should_receive(:perform_turn).at_least(5)
-      runner.start
-    end
-  end
-
   describe "During a game turn" do
     it "shows us the board" do
       runner.should_receive(:display_board)
