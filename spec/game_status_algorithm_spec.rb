@@ -30,160 +30,34 @@ describe GameStatusAlgorithm do
       end
     end
 
-    describe "and the player has a set on a row" do
-      it "lets us know that the player has won the game from the first row" do
-        board.apply_move(:player, "1")
-        board.apply_move(:player, "2")
-        board.apply_move(:player, "3")
 
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
+    describe "and we want to make sure that any player can win" do
+      it "allows the player to win" do
+        assert_wins_with(:player, %w{ 1 2 3 })
       end
 
-      it "lets us know that the player has won the game from the second row" do
-        board.apply_move(:player, "4")
-        board.apply_move(:player, "5")
-        board.apply_move(:player, "6")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
-      end
-
-      it "lets us know that the player has won the game from the third row" do
-        board.apply_move(:player, "7")
-        board.apply_move(:player, "8")
-        board.apply_move(:player, "9")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
+      it "allows the computer to win" do
+        assert_wins_with(:computer, %w{ 1 2 3 })
       end
     end
 
-    describe "and the computer has a set on a row" do
-      it "lets us know that the computer has won the game from the first row" do
-        board.apply_move(:computer, "1")
-        board.apply_move(:computer, "2")
-        board.apply_move(:computer, "3")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-
-      it "lets us know that the computer has won the game from the second row" do
-        board.apply_move(:computer, "4")
-        board.apply_move(:computer, "5")
-        board.apply_move(:computer, "6")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-
-      it "lets us know that the computer has won the game from the third row" do
-        board.apply_move(:computer, "7")
-        board.apply_move(:computer, "8")
-        board.apply_move(:computer, "9")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-    end
-
-    describe "and the player has a set on a column" do
-      it "lets us know that the player has won the game from the first column" do
-        board.apply_move(:player, "1")
-        board.apply_move(:player, "4")
-        board.apply_move(:player, "7")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
-      end
-
-      it "lets us know that the player has won the game from the second column" do
-        board.apply_move(:player, "2")
-        board.apply_move(:player, "5")
-        board.apply_move(:player, "8")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
-      end
-
-      it "lets us know that the player has won the game from the third column" do
-        board.apply_move(:player, "3")
-        board.apply_move(:player, "6")
-        board.apply_move(:player, "9")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
-      end
-    end
-
-    describe "and the computer has a set on a column" do
-      it "lets us know that the computer has won the game from the first column" do
-        board.apply_move(:computer, "1")
-        board.apply_move(:computer, "4")
-        board.apply_move(:computer, "7")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-
-      it "lets us know that the computer has won the game from the second column" do
-        board.apply_move(:computer, "2")
-        board.apply_move(:computer, "5")
-        board.apply_move(:computer, "8")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-
-      it "lets us know that the computer has won the game from the third column" do
-        board.apply_move(:computer, "3")
-        board.apply_move(:computer, "6")
-        board.apply_move(:computer, "9")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-    end
-
-    describe "and the player has a set on a a diagonal" do
-      it "lets us know that the player has won the game from the first diagonal" do
-        board.apply_move(:player, "1")
-        board.apply_move(:player, "5")
-        board.apply_move(:player, "9")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
-      end
-
-      it "lets us know that the player has won the game from the second diagonal" do
-        board.apply_move(:player, "7")
-        board.apply_move(:player, "5")
-        board.apply_move(:player, "3")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:player)
-      end
-    end
-
-    describe "and the computer has a set on a a diagonal" do
-      it "lets us know that the computer has won the game from the first diagonal" do
-        board.apply_move(:computer, "1")
-        board.apply_move(:computer, "5")
-        board.apply_move(:computer, "9")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
-      end
-
-      it "lets us know that the computer has won the game from the second diagonal" do
-        board.apply_move(:computer, "7")
-        board.apply_move(:computer, "5")
-        board.apply_move(:computer, "3")
-
-        result = status_algo.check_status(board, players)
-        result.should equal(:computer)
+    describe "and someone has a set on a row" do
+      it "lets us know that each of the sets can be won from" do
+        board.tile_set_identifiers.each do |set|
+          assert_wins_with(:player, set)
+        end
       end
     end
   end
+
+  def assert_wins_with(owner, moves)
+    apply_moves(owner, moves)
+    result = status_algo.check_status(board, players)
+    result.should equal(owner)
+  end
+
+  def apply_moves(owner, moves)
+    moves.each { |move| board.apply_move(owner, move) }
+  end
 end
+
