@@ -22,11 +22,13 @@ class GameRunner
 
   def perform_turn
     output display_board
-
-    player_took_action = perform_player_action
+    perform_player_action
     check_game_status
+    perform_computer_action if is_ok_for_computer_to_perform_action
+  end
 
-    perform_computer_action if player_took_action && @winner == :none
+  def is_ok_for_computer_to_perform_action
+    @winner == :none
   end
 
   def check_game_status
@@ -34,16 +36,22 @@ class GameRunner
   end
 
   def perform_player_action
-    player_choice = ask_for_player_move
-    if validate_move(player_choice)
-      @board.apply_move(:player, player_choice)
-      return true
+    ask_for_player_move
+    player_choice = get_choice_from_player
+    @board.apply_move(:player, player_choice)
+  end
+
+  def get_choice_from_player
+    valid_choice = nil
+    while valid_choice.nil? do
+      player_choice = input
+      valid_choice = player_choice if validate_move(player_choice)
     end
-    false
+    valid_choice
   end
 
   def perform_computer_action
-    available_moves = @board.tiles.select { |tile| tile[:owner] == :none }
+    available_moves = @board.available_tiles
     @board.apply_move(:computer, available_moves[0][:square])
   end
 
@@ -61,17 +69,18 @@ class GameRunner
 
   def ask_for_player_move
     output 'Please choose your move:'
-    input
   end
 
   def validate_move(square)
-    is_available = is_move_available(square)
-    output "Sorry the move has already been taken." unless is_available
-
     is_valid = is_move_valid(square)
     output "Sorry, that was an invalid choice. Please try again." unless is_valid
+    return false unless is_valid
 
-    is_available && is_valid
+    is_available = is_move_available(square)
+    output "Sorry the move has already been taken." unless is_available
+    return false unless is_available
+
+    true
   end
 
   def is_move_available(square)

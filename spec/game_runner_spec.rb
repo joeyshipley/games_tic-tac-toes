@@ -40,11 +40,26 @@ describe GameRunner do
     end
   end
 
+  describe "When asking the player for a move" do
+    describe "and they don't provide a correct move" do
+      it "asks them for another move before continuing" do
+        runner.should_receive(:validate_move).twice.and_return(false, true)
+        runner.get_choice_from_player
+      end
+    end
+
+    describe "and they provide a valid move" do
+      it "doesn't ask them for another move" do
+        runner.should_receive(:validate_move).once.and_return(true)
+        runner.get_choice_from_player
+      end
+    end
+  end
   describe "When a move is provided from the player" do
     it "applies the move to the board" do
       runner.stub(:input) { "1" }
       board.should_receive(:apply_move).once.with(:player, "1")
-      runner.perform_turn
+      runner.perform_player_action
     end
 
     describe "that has already been taken" do
@@ -53,7 +68,7 @@ describe GameRunner do
           @ui = arg
         end
 
-        runner.stub(:is_move_available) { false }
+        runner.should_receive(:is_move_available).and_return(false, true)
         runner.perform_turn
         @ui.should match /already been taken/
       end
@@ -65,7 +80,7 @@ describe GameRunner do
           @ui = arg
         end
 
-        runner.stub(:is_move_valid) { false }
+        runner.should_receive(:is_move_valid).and_return(false, true)
         runner.perform_turn
         @ui.should match /invalid choice/
       end
@@ -76,15 +91,6 @@ describe GameRunner do
         it "does not make the computers move" do
           game_status.stub(:check_status).and_return(:player)
           board.should_not_receive(:apply_move).with(:computer, anything())
-          runner.perform_turn
-        end
-      end
-
-      describe "and the players move was not valid" do
-        it "does not make the computers move" do
-          game_status.stub(:check_status).and_return(:none)
-          board.should_not_receive(:apply_move).with(:computer, anything())
-          runner.stub(:is_move_valid) { false }
           runner.perform_turn
         end
       end
