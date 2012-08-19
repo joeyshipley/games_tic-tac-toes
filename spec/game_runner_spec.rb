@@ -5,10 +5,12 @@ describe GameRunner do
   let(:runner) { GameRunner.new }
   let!(:board) { GameBoard.new }
   let!(:game_status) { GameStatusAlgorithm.new([ :player, :computer ]) }
+  let!(:ai) { ComputerAiAlgorithm.new(game_status) }
 
   before(:each) do
     GameBoard.stub(:new) { board }
     GameStatusAlgorithm.stub(:new) { game_status }
+    ComputerAiAlgorithm.stub(:new) { ai }
 
     runner.stub(:output) # tests get cluttered from the actual 'puts' calls.
     runner.stub(:input) { "1" }
@@ -18,6 +20,7 @@ describe GameRunner do
     board.stub(:apply_move)
 
     game_status.stub(:check_status).and_return(:player)
+    ai.stub(:calculate) { "1" }
   end
 
   describe "During a game turn" do
@@ -98,13 +101,6 @@ describe GameRunner do
       it "has the computer actually make a move" do
         game_status.stub(:check_status).and_return(:none)
         board.should_receive(:apply_move).once.with(:computer, anything())
-        runner.perform_turn
-      end
-
-      it "only performs a move that is available" do
-        game_status.stub(:check_status).and_return(:none)
-        board.tiles[0][:owner] = :player
-        board.should_receive(:apply_move).once.with(:computer, /[2-9]/)
         runner.perform_turn
       end
     end

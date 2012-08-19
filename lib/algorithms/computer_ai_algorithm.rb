@@ -3,19 +3,24 @@ require 'algorithms/game_status_algorithm'
 class ComputerAiAlgorithm
   def initialize(game_status_algorithm)
     @game_status = game_status_algorithm
-    @max_depth = 9
+    @depth = 99
   end
 
   def calculate(board)
-    puts ""
-    puts "move values:"
+    @highest_tile = nil
+    @highest_score = nil
+    #----------------------------------------------------------
+    #puts ""
+    #puts "move values:"
+    #----------------------------------------------------------
 
     available_moves = board.available_tiles
     available_moves.each do |tile|
-      current_depth = 1
-      tile_value = tile_value_from(board, tile[:square], current_depth, :computer)
-      check_tile_against_highest_tile_found(tile, tile_value)
-      puts "#{tile[:square]} : #{tile_value}"
+      tile_value = minimax(board, tile[:square], @depth, :computer)
+      #----------------------------------------------------------
+      #puts "#{tile[:square]} : #{tile_value}"
+      #----------------------------------------------------------
+      check_against_other_tiles(tile[:square], tile_value)
     end
 
     return @highest_tile
@@ -23,58 +28,48 @@ class ComputerAiAlgorithm
 
   private
 
-  def analysis_of_tile_value(board, square, owner)
-    opponent = get_opponent_of(owner)
-    has_won = @game_status.check_status(board)
-    value = 0
-    value = 10000 if has_won == owner
-    value = 1000 if has_won == :draw
-    value = -10000 if has_won == opponent
-    return value * get_nega_mod_multipler_from(owner)
-  end
+  def check_against_other_tiles(tile, score)
+    @highest_tile = tile if @highest_tile.nil?
+    @highest_score = score if @highest_score.nil?
 
-  def tile_value_from(board, square, depth, owner)
-    future_board = setup_future_board_from(board, square, owner)
-    is_game_over = @game_status.check_status(future_board) != :none
-    if is_game_over || depth > @max_depth
-      return analysis_of_tile_value(future_board, square, owner)
+    if score > @highest_score
+      @highest_tile = tile
+      @highest_score = score
     end
-
-    return process_value_from(future_board, depth, owner)
   end
 
-  def setup_future_board_from(board, square, owner)
-    future_board = Marshal::load(Marshal.dump(board))
-    future_board.apply_move(owner, square)
-    return future_board
-  end
+  def minimax(board, square, depth, owner)
+    is_game_over = @game_status.check_status(board) != :none
+    return get_tile_score(board) if is_game_over || depth == 0
 
-  def process_value_from(board, depth, owner)
-    nega_mod = get_nega_mod_multipler_from(owner)
-    current_value = 1 * nega_mod
-    opponent = get_opponent_of(owner)
-
+    board.apply_move(owner, square)
     available_tiles = board.available_tiles
-    available_tiles.each do |tile|
-      deep_value = tile_value_from(board, tile[:square], depth + 1, opponent)
-      current_value = deep_value if (deep_value * nega_mod) < (current_value * nega_mod)
+
+    best_score = 99
+    if owner == :computer
+      available_tiles.each do |tile|
+        score = minimax(board, tile[:square],  depth - 1, :player)
+        best_score = best_score + score if score < best_score
+      end
+      board.apply_move(:none, square)
+      return best_score
+    else
+      best_score = -best_score
+      available_tiles.each do |tile|
+        score = minimax(board, tile[:square],  depth - 1, :computer)
+        best_score = best_score + score if score > best_score
+      end
+      board.apply_move(:none, square)
+      return best_score
     end
 
-    return current_value
   end
 
-  def get_nega_mod_multipler_from(owner)
-    return owner == :player ? -1 : 1
-  end
-
-  def get_opponent_of(owner)
-    return owner == :computer ? :player : :computer
-  end
-
-  def check_tile_against_highest_tile_found(tile, tile_value)
-    if @highest_tile_value.nil? || tile_value > @highest_tile_value
-      @highest_tile_value = tile_value
-      @highest_tile = tile[:square]
-    end
+  def get_tile_score(board)
+    winner = @game_status.check_status(board)
+    return 99 if winner == :computer
+    return 1 if winner == :draw
+    return 0 if winner == :none
+    return -1 if winner == :player
   end
 end

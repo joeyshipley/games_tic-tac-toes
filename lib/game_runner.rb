@@ -1,5 +1,6 @@
 require 'game_board'
 require 'algorithms/game_status_algorithm'
+require 'algorithms/computer_ai_algorithm'
 
 class GameRunner
   attr_accessor :board
@@ -8,6 +9,7 @@ class GameRunner
     @board = GameBoard.new
     @players = [ :player, :computer ]
     @game_status = GameStatusAlgorithm.new(@players)
+    @ai = ComputerAiAlgorithm.new(@game_status)
   end
 
   def start
@@ -51,8 +53,8 @@ class GameRunner
   end
 
   def perform_computer_action
-    available_moves = @board.available_tiles
-    @board.apply_move(:computer, available_moves[0][:square])
+    computer_choice = @ai.calculate(@board)
+    @board.apply_move(:computer, computer_choice)
   end
 
   def output(message)

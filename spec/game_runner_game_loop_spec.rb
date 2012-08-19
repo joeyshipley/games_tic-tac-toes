@@ -6,13 +6,16 @@ describe GameRunner do
   let(:runner) { GameRunner.new }
   let!(:board) { GameBoard.new }
   let!(:game_status) { FakeGameStatusAlgorithm.new([]) }
+  let!(:ai) { ComputerAiAlgorithm.new(game_status) }
 
   before(:each) do
     GameBoard.stub(:new) { board }
     GameStatusAlgorithm.stub(:new) { game_status }
+    ComputerAiAlgorithm.stub(:new) { ai }
 
     runner.stub(:output) # tests get cluttered from the actual 'puts' calls.
     runner.stub(:input) { "1" }
+    ai.stub(:calculate) { "1" }
   end
 
   describe "When running through the game loop" do
