@@ -1,26 +1,27 @@
 require 'algorithms/game_status_algorithm'
 
 class ComputerAiAlgorithm
+  Infinity = 1.0/0
+
   def initialize(game_status_algorithm)
     @game_status = game_status_algorithm
-    @depth = 99
   end
 
   def calculate(board)
     @highest_tile = nil
     @highest_score = nil
     #----------------------------------------------------------
-    #puts ""
-    #puts "move values:"
+    puts ""
+    puts "move values:"
     #----------------------------------------------------------
 
     available_moves = board.available_tiles
     available_moves.each do |tile|
-      tile_value = minimax(board, tile[:square], @depth, :computer)
+      tile_value = max(board, tile[:square], 9)
       #----------------------------------------------------------
-      #puts "#{tile[:square]} : #{tile_value}"
+      puts "#{tile[:square]} : #{tile_value}"
       #----------------------------------------------------------
-      check_against_other_tiles(tile[:square], tile_value)
+      check_result_against_highest(tile[:square], tile_value)
     end
 
     return @highest_tile
@@ -28,48 +29,58 @@ class ComputerAiAlgorithm
 
   private
 
-  def check_against_other_tiles(tile, score)
-    @highest_tile = tile if @highest_tile.nil?
-    @highest_score = score if @highest_score.nil?
-
-    if score > @highest_score
-      @highest_tile = tile
+  def check_result_against_highest(square, score)
+    if @highest_tile.nil? || @highest_score.nil?
+      @highest_tile = square
       @highest_score = score
     end
+
+    if score > @highest_score
+      @highest_score = score
+      @highest_tile = square
+    end
   end
 
-  def minimax(board, square, depth, owner)
-    is_game_over = @game_status.check_status(board) != :none
-    return get_tile_score(board) if is_game_over || depth == 0
-
-    board.apply_move(owner, square)
-    available_tiles = board.available_tiles
-
-    best_score = 99
-    if owner == :computer
-      available_tiles.each do |tile|
-        score = minimax(board, tile[:square],  depth - 1, :player)
-        best_score = best_score + score if score < best_score
-      end
+  def max(board, square, depth)
+    board.apply_move(:computer, square)
+    winner = @game_status.check_status(board)
+    if winner != :none || depth <= 0
       board.apply_move(:none, square)
-      return best_score
-    else
-      best_score = -best_score
-      available_tiles.each do |tile|
-        score = minimax(board, tile[:square],  depth - 1, :computer)
-        best_score = best_score + score if score > best_score
-      end
-      board.apply_move(:none, square)
-      return best_score
+      return -2 * depth if winner == :player
+      return 2 * depth if winner == :computer
+      return 1 * depth if winner == :draw
+      return 0 if depth <= 0
     end
 
+    best_score = Infinity
+    board.available_tiles.each do |tile|
+      score = min(board, tile[:square], depth - 1)
+      best_score = score if score < best_score
+    end
+
+    board.apply_move(:none, square)
+    return best_score
   end
 
-  def get_tile_score(board)
+  def min(board, square, depth)
+    board.apply_move(:player, square)
     winner = @game_status.check_status(board)
-    return 99 if winner == :computer
-    return 1 if winner == :draw
-    return 0 if winner == :none
-    return -1 if winner == :player
+    if winner != :none || depth <= 0
+      board.apply_move(:none, square)
+      return 2 * depth if winner == :player
+      return -2 * depth if winner == :computer
+      return -2 * depth if winner == :draw
+      return 0 if depth <= 0
+    end
+
+    best_score = -Infinity
+    board.available_tiles.each do |tile|
+      score = max(board, tile[:square], depth - 1)
+      best_score = score if score > best_score
+    end
+
+    board.apply_move(:none, square)
+    return best_score
   end
+
 end
