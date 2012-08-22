@@ -13,15 +13,15 @@ class ComputerAiAlgorithm
     @highest_tile = nil
     @highest_score = nil
     #----------------------------------------------------------
-    puts ""
-    puts "move values:"
+    #puts ""
+    #puts "move values:"
     #----------------------------------------------------------
 
     available_tiles = board.available_tiles
     available_tiles.each do |tile|
       tile_value = max(board, tile[:square], MaxDepth)
       #----------------------------------------------------------
-      puts "#{tile[:square]} : #{tile_value}"
+      #puts "#{tile[:square]} : #{tile_value}"
       #----------------------------------------------------------
       check_result_against_highest(tile[:square], tile_value)
     end
