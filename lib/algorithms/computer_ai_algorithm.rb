@@ -3,7 +3,6 @@ require 'algorithms/game_status_algorithm'
 class ComputerAiAlgorithm
   Infinity = 1.0/0
   MaxDepth = 9
-  WeightMod = 10
 
   def initialize(game_status_algorithm)
     @game_status = game_status_algorithm
@@ -19,7 +18,7 @@ class ComputerAiAlgorithm
 
     available_tiles = board.available_tiles
     available_tiles.each do |tile|
-      tile_value = max(board, tile[:square], MaxDepth)
+      tile_value = negamax(board, tile[:square], MaxDepth, :computer, 1)
       #----------------------------------------------------------
       #puts "#{tile[:square]} : #{tile_value}"
       #----------------------------------------------------------
@@ -32,21 +31,15 @@ class ComputerAiAlgorithm
   private
 
   def check_result_against_highest(square, score)
-    if @highest_tile.nil? || @highest_score.nil?
+    if @highest_tile.nil? || @highest_score.nil? || score > @highest_score
       @highest_tile = square
       @highest_score = score
-    end
-
-    if score > @highest_score
-      @highest_score = score
-      @highest_tile = square
     end
   end
 
   def score_tile(board, depth, winner)
-    weight = depth * WeightMod
-    return 1 * weight if winner == :computer
-    return -1 * weight if winner == :player
+    return 1 * depth if winner == :computer
+    return -1 * depth if winner == :player
     return 0
   end
 
@@ -56,29 +49,19 @@ class ComputerAiAlgorithm
     board_copy
   end
 
-  def max(board, square, depth)
-    board_copy = copy(board, :computer, square)
-    winner = @game_status.check_status(board_copy)
-    return score_tile(board_copy, depth, winner) if winner != :none
-
-    best_score = Infinity
-    board_copy.available_tiles.each do |tile|
-      score = min(board_copy, tile[:square], depth - 1)
-      best_score = score if score < best_score
-    end
-
-    return best_score
+  def opponent(current)
+    current == :player ? :computer : :player
   end
 
-  def min(board, square, depth)
-    board_copy = copy(board, :player, square)
+  def negamax(board, square, depth, owner, negamod)
+    board_copy = copy(board, owner, square)
     winner = @game_status.check_status(board_copy)
     return score_tile(board_copy, depth, winner) if winner != :none
 
-    best_score = -Infinity
+    best_score = Infinity * negamod
     board_copy.available_tiles.each do |tile|
-      score = max(board_copy, tile[:square], depth - 1)
-      best_score = score if score > best_score
+      score = negamax(board_copy, tile[:square], depth - 1, opponent(owner), -negamod)
+      best_score = score if score * negamod < best_score * negamod
     end
 
     return best_score
