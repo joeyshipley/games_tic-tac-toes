@@ -6,12 +6,13 @@ require 'internationalization/english_copy_provider'
 class GameRunner
   attr_accessor :board
 
-  def initialize
+  def initialize(interface, text_provider)
+    @interface = interface
     @board = GameBoard.new
     @players = [ :player, :computer ]
     @game_status = GameStatusAlgorithm.new(@players)
     @ai = ComputerAiAlgorithm.new(@game_status)
-    @text = EnglishCopyProvider.new
+    @text = text_provider
   end
 
   def start
@@ -60,11 +61,11 @@ class GameRunner
   end
 
   def output(message)
-    puts message
+    @interface.output message
   end
 
   def input
-    gets.chomp
+    @interface.input
   end
 
   def display_board

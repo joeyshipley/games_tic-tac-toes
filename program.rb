@@ -1,5 +1,5 @@
 $LOAD_PATH << './lib'
-require 'game_runner'
+require 'game_engine'
 
-game_runner = GameRunner.new
-game_runner.start
+game_engine = GameEngine.new
+game_engine.start

@@ -3,7 +3,7 @@ require 'helpers/fake_game_status_algorithm'
 
 describe GameRunner do
 
-  let(:runner) { GameRunner.new }
+  let(:runner) { GameRunner.new(ConsoleInterface.new, EnglishCopyProvider.new) }
   let!(:board) { GameBoard.new }
   let!(:game_status) { FakeGameStatusAlgorithm.new([]) }
   let!(:ai) { ComputerAiAlgorithm.new(game_status) }

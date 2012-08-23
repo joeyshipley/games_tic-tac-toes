@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GameRunner do
 
-  let(:runner) { GameRunner.new }
+  let(:runner) { GameRunner.new(ConsoleInterface.new, text) }
   let!(:board) { GameBoard.new }
   let!(:game_status) { GameStatusAlgorithm.new([ :player, :computer ]) }
   let!(:ai) { ComputerAiAlgorithm.new(game_status) }
