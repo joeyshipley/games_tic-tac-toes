@@ -4,7 +4,7 @@ require 'internationalization/english_copy_provider'
 require 'internationalization/spanish_copy_provider'
 
 class GameEngine
-  def initialization
+  def initialize
     @interface = ConsoleInterface.new
   end
 
@@ -13,7 +13,7 @@ class GameEngine
     choice = input
 
     text_provider = get_internationalization choice
-    game_runner = GameRunner.new(@console, text_provider)
+    game_runner = GameRunner.new(@interface, text_provider)
     game_runner.start
   end
 
