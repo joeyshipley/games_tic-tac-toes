@@ -1,6 +1,7 @@
 require 'game_board'
 require 'algorithms/game_status_algorithm'
 require 'algorithms/computer_ai_algorithm'
+require 'internationalization/english_copy_provider'
 
 class GameRunner
   attr_accessor :board
@@ -10,6 +11,7 @@ class GameRunner
     @players = [ :player, :computer ]
     @game_status = GameStatusAlgorithm.new(@players)
     @ai = ComputerAiAlgorithm.new(@game_status)
+    @text = EnglishCopyProvider.new
   end
 
   def start
@@ -70,16 +72,16 @@ class GameRunner
   end
 
   def ask_for_player_move
-    output 'Please choose your move:'
+    output @text.ask_for_player_move
   end
 
   def validate_move(square)
     is_valid = is_move_valid(square)
-    output "Sorry, that was an invalid choice. Please try again." unless is_valid
+    output @text.invalid_move_message unless is_valid
     return false unless is_valid
 
     is_available = is_move_available(square)
-    output "Sorry the move has already been taken." unless is_available
+    output @text.move_already_taken_message unless is_available
     return false unless is_available
 
     true
@@ -94,7 +96,6 @@ class GameRunner
   end
 
   def display_winner
-    return "The #{@winner} has won the game." if @winner == :computer || @winner == :player
-    return "Game was a tie." if @winner == :draw
+    @text.game_status_winner_text(@winner)
   end
 end

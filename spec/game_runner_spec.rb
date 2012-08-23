@@ -6,11 +6,13 @@ describe GameRunner do
   let!(:board) { GameBoard.new }
   let!(:game_status) { GameStatusAlgorithm.new([ :player, :computer ]) }
   let!(:ai) { ComputerAiAlgorithm.new(game_status) }
+  let!(:text) { EnglishCopyProvider.new }
 
   before(:each) do
     GameBoard.stub(:new) { board }
     GameStatusAlgorithm.stub(:new) { game_status }
     ComputerAiAlgorithm.stub(:new) { ai }
+    EnglishCopyProvider.stub(:new) { text }
 
     runner.stub(:output) # tests get cluttered from the actual 'puts' calls.
     runner.stub(:input) { "1" }
@@ -30,11 +32,8 @@ describe GameRunner do
     end
 
     it "asks the player for their move" do
-      runner.stub(:output) do |arg|
-        @ui = arg
-      end
+      text.should_receive(:ask_for_player_move)
       runner.perform_turn
-      @ui.should match /choose your move/
     end
 
     it "waits for the players input" do
@@ -67,25 +66,17 @@ describe GameRunner do
 
     describe "that has already been taken" do
       it "lets us know that it has been taken" do
-        runner.stub(:output) do |arg|
-          @ui = arg
-        end
-
         runner.should_receive(:is_move_available).and_return(false, true)
+        text.should_receive(:move_already_taken_message)
         runner.perform_turn
-        @ui.should match /already been taken/
       end
     end
 
     describe "that is not a legitimate move" do
       it "lets us know that it was not a valid tile" do
-        runner.stub(:output) do |arg|
-          @ui = arg
-        end
-
         runner.should_receive(:is_move_valid).and_return(false, true)
+        text.should_receive(:invalid_move_message)
         runner.perform_turn
-        @ui.should match /invalid choice/
       end
     end
 
