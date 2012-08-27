@@ -1,0 +1,8 @@
+messages:
+  choose_language: "To continue in English, press [Enter] or [1]\nPara continuar en espanol, presione [2]"
+  choose_move: "Please choose a move:"
+  invalid_move: "Sorry, that was an invalid choice. Please try again."
+  already_taken: "Sorry, that move has already been taken. Please try again."
+  player_won: "The player has won the game"
+  computer_won: "The computer has won the game."
+  game_draw: "Game was a tie."

@@ -1,7 +1,5 @@
 require 'game_runner'
 require 'console_interface'
-require 'internationalization/english_copy_provider'
-require 'internationalization/spanish_copy_provider'
 
 class GameEngine
   def initialize
@@ -11,28 +9,27 @@ class GameEngine
   def start
     ask_for_language
     choice = input
+    set_internationalization choice
 
-    text_provider = get_internationalization choice
-    game_runner = GameRunner.new(@interface, text_provider)
+    game_runner = GameRunner.new(@interface)
     game_runner.start
   end
 
   def ask_for_language
-    output "To continue in English, press [Enter] or [1]"
-    output "Para continuar en espanol, presione [2]"
+    output t.messages.choose_language
   end
 
-  def get_internationalization(choice)
-    return create_spanish_provider if choice.eql? "2"
-    return create_english_provider
+  def set_internationalization(choice)
+    return set_spanish_provider if choice.eql? "2"
+    return set_english_provider
   end
 
-  def create_english_provider
-    EnglishCopyProvider.new
+  def set_english_provider
+    R18n.set 'en'
   end
 
-  def create_spanish_provider
-    SpanishCopyProvider.new
+  def set_spanish_provider
+    R18n.set 'es'
   end
 
   def output(message)

@@ -22,7 +22,7 @@ describe GameEngine do
 
     describe "and the player chooses english" do
       it 'uses the english content' do
-        engine.should_receive(:create_english_provider)
+        engine.should_receive(:set_english_provider)
         engine.stub(:input) { "" }
         engine.start
       end
@@ -30,7 +30,7 @@ describe GameEngine do
 
     describe "and the player chooses spanish" do
       it 'uses the spanish content' do
-        engine.should_receive(:create_spanish_provider)
+        engine.should_receive(:set_spanish_provider)
         engine.stub(:input) { "2" }
         engine.start
       end
