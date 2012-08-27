@@ -1,28 +1,8 @@
 require 'tiles'
 
-class GameBoard
+module GameBoard
   attr_accessor :tiles
   attr_reader :tile_set_identifiers
-
-  def initialize
-    @tiles = Tiles.new
-    ("1".."9").each do |i|
-      @tiles.push({ :square => i, :owner => :none })
-    end
-
-    # Refactor needed to make this readable. This is a list of the winning
-    # combos: rows, columns and diagonals for a 3x3 board...
-    @tile_set_identifiers = [
-      ["1", "2", "3"],
-      ["4", "5", "6"],
-      ["7", "8", "9"],
-      ["1", "4", "7"],
-      ["2", "5", "8"],
-      ["3", "6", "9"],
-      ["1", "5", "9"],
-      ["7", "5", "3"]
-    ]
-  end
 
   def available_tiles
     @tiles.available_tiles
@@ -50,25 +30,6 @@ class GameBoard
   def apply_move(owner, square)
     tile = @tiles.get_tile(square)
     tile[:owner] = owner
-  end
-
-  def for_display
-    board = ""
-    board += "                   \n"
-    board += "      |     |      \n"
-    board += "   #{tile_display("1")}  |  #{tile_display("2")}  |  #{tile_display("3")}   \n"
-    board += "      |     |      \n"
-    board += " ----- ----- ----- \n"
-    board += "      |     |      \n"
-    board += "   #{tile_display("4")}  |  #{tile_display("5")}  |  #{tile_display("6")}   \n"
-    board += "      |     |      \n"
-    board += " ----- ----- ----- \n"
-    board += "      |     |      \n"
-    board += "   #{tile_display("7")}  |  #{tile_display("8")}  |  #{tile_display("9")}   \n"
-    board += "      |     |      \n"
-    board += "                   \n"
-
-    return board
   end
 
   def tile_display(square)

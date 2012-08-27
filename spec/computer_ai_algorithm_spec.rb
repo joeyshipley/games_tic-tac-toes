@@ -4,7 +4,7 @@ describe ComputerAiAlgorithm do
 
   let!(:game_status) { GameStatusAlgorithm.new([ :player, :computer ]) }
   let(:ai) { ComputerAiAlgorithm.new(game_status) }
-  let(:board) { GameBoard.new }
+  let(:board) { GameBoard2d.new }
 
   before(:each) do
     GameStatusAlgorithm.stub(:new) { game_status }

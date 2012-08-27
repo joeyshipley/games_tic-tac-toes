@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'GameBoard' do
-  let(:board) { GameBoard.new }
+  let(:board) { GameBoard2d.new }
 
   describe "When we need the board to be displayed" do
     describe "and no moves have been made" do

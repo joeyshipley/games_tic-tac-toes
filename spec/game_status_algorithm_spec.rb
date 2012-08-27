@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GameStatusAlgorithm do
 
   let(:status_algo) { GameStatusAlgorithm.new([ :player, :computer ]) }
-  let(:board) { GameBoard.new }
+  let(:board) { GameBoard2d.new }
 
   describe "When checking to see who the winner is" do
 

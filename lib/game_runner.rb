@@ -1,4 +1,4 @@
-require 'game_board'
+require 'game_board_2d'
 require 'algorithms/game_status_algorithm'
 require 'algorithms/computer_ai_algorithm'
 
@@ -7,7 +7,7 @@ class GameRunner
 
   def initialize(interface)
     @interface = interface
-    @board = GameBoard.new
+    @board = GameBoard2d.new
     @players = [ :player, :computer ]
     @game_status = GameStatusAlgorithm.new(@players)
     @ai = ComputerAiAlgorithm.new(@game_status)
