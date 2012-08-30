@@ -1,4 +1,5 @@
 require 'game_board_2d'
+require 'game_board_3d'
 require 'algorithms/game_status_algorithm'
 require 'algorithms/computer_ai_algorithm'
 
