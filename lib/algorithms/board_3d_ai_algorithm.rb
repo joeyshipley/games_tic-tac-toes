@@ -6,6 +6,7 @@ class Board3dAiAlgorithm
     @move_set = []
   end
 
+  # refactor: clean up, to tired to look at this more tonight.
   def calculate(board)
     @winning_tile = "0"
 

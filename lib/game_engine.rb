@@ -53,6 +53,7 @@ class GameEngine
     return build_runner_for_3d if     choice == "3"
   end
 
+  # refactor these two methods into a GameRunner factory? SRP vs Simple Design
   def build_runner_for_2d
     board = GameBoard2d.new
     ai = ComputerAiAlgorithm.new(@game_status)

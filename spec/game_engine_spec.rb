@@ -44,25 +44,32 @@ describe GameEngine do
       end
     end
 
-    describe "and the player chooses the 2d game" do
-      it "sets up the game to use the 2d components" do
-        engine.should_receive(:build_runner_for_2d)
-        engine.stub(:input).and_return("")
-        engine.start
-      end
-    end
-
-    describe "and the player chooses the 3d game" do
-      it "sets up the game to use the 3d components" do
-        engine.should_receive(:build_runner_for_3d)
-        engine.stub(:input).and_return("3")
-        engine.start
+    describe "and the player chooces the" do
+      before(:each) do
+        @temp_runner = double("game_runner")
+        @temp_runner.stub(:start)
       end
 
-      it "the computer makes the first move" do
-        board3d.should_receive(:apply_move)
-        engine.stub(:input).and_return("3")
-        engine.start
+      describe "2d game" do
+        it "sets up the game to use the 2d components" do
+          engine.should_receive(:build_runner_for_2d).and_return(@temp_runner)
+          engine.stub(:input).and_return("")
+          engine.start
+        end
+      end
+
+      describe "3d game" do
+        it "sets up the game to use the 3d components" do
+          engine.should_receive(:build_runner_for_3d).and_return(@temp_runner)
+          engine.stub(:input).and_return("3")
+          engine.start
+        end
+
+        it "the computer makes the first move" do
+          board3d.should_receive(:apply_move)
+          engine.stub(:input).and_return("3")
+          engine.start
+        end
       end
     end
   end
