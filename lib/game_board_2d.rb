@@ -9,6 +9,7 @@ class GameBoard2d
     ("1".."9").each do |i|
       @tiles.push({ :square => i, :owner => :none })
     end
+    @center_tile = "5"
 
     @tile_set_identifiers = [
       # rows

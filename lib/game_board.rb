@@ -2,6 +2,7 @@ require 'tiles'
 
 module GameBoard
   attr_accessor :tiles
+  attr_accessor :center_tile
   attr_reader :tile_set_identifiers
 
   def available_tiles
