@@ -11,6 +11,8 @@ class GameBoard3d
     end
     @center_tile = "14"
 
+    # NOTE: the implementation for winning identifiers and winning sets are rough
+    # in the 3d board. Look into alternate implementation ideas.
     @tile_set_identifiers = [
       # rows: x
       ["1", "2", "3"],
@@ -69,6 +71,44 @@ class GameBoard3d
       ["7", "14", "21"],
       ["3", "14", "25"]
     ]
+  end
+
+  def get_winning_move_set
+    move_set = []
+    player_tile = get_player_tiles[0][:square]
+    case player_tile
+    # corners : top/middle
+    when "1", "7", "10", "16"
+      move_set = ["22", "13"]
+    # corners : top/middle
+    when "3", "9", "12", "18"
+      move_set = ["24", "15"]
+    # corners : bottom
+    when "19", "25"
+      move_set = ["4", "13"]
+    # corners : bottom
+    when "21", "27"
+      move_set = ["6", "15"]
+    # edges : top/middle
+    when "4", "8", "13", "17"
+      move_set = ["25", "16"]
+    # edges : top/middle
+    when "2", "6", "11", "15"
+      move_set = ["21", "12"]
+    # edges : bottom
+    when "22", "26"
+      move_set = ["7", "16"]
+    # edges : bottom
+    when "20", "24"
+      move_set = ["3", "12"]
+    # center : top
+    when "5"
+      move_set = ["1", "10"]
+    # center : bottom
+    when "23"
+      move_set = ["19", "10"]
+    end
+    move_set
   end
 
   def for_display
