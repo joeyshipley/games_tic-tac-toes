@@ -39,4 +39,8 @@ module GameBoard
     return "O" if tile[:owner] == :computer
     return square if tile[:owner] == :none
   end
+
+  def get_player_tiles()
+    @tiles.select { |tile| tile[:owner] == :player }
+  end
 end

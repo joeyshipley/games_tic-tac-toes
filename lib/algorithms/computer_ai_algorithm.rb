@@ -1,27 +1,22 @@
-require 'algorithms/game_status_algorithm'
+require "algorithms/board_algorithm"
 
 class ComputerAiAlgorithm
-  Infinity = 1.0/0
-  MaxDepth = 9
+  include BoardAlgorithm
+
+  INFINITY = Float::INFINITY
+  MAX_DEPTH = 9
 
   def initialize(game_status_algorithm)
     @game_status = game_status_algorithm
   end
 
   def calculate(board)
-    @highest_tile = nil
-    @highest_score = nil
-    #----------------------------------------------------------
-    #puts ""
-    #puts "move values:"
-    #----------------------------------------------------------
+    @highest_tile = ""
+    @highest_score = -INFINITY
 
     available_tiles = board.available_tiles
     available_tiles.each do |tile|
-      tile_value = negamax(board, tile[:square], MaxDepth, :computer, 1)
-      #----------------------------------------------------------
-      #puts "#{tile[:square]} : #{tile_value}"
-      #----------------------------------------------------------
+      tile_value = negamax(board, tile[:square], MAX_DEPTH, :computer, 1)
       check_result_against_highest(tile[:square], tile_value)
     end
 
@@ -31,7 +26,7 @@ class ComputerAiAlgorithm
   private
 
   def check_result_against_highest(square, score)
-    if @highest_tile.nil? || @highest_score.nil? || score > @highest_score
+    if score > @highest_score
       @highest_tile = square
       @highest_score = score
     end
@@ -43,12 +38,6 @@ class ComputerAiAlgorithm
     return 0
   end
 
-  def copy(board, owner, square)
-    board_copy = Marshal::load(Marshal.dump(board))
-    board_copy.apply_move(owner, square)
-    board_copy
-  end
-
   def opponent(current)
     current == :player ? :computer : :player
   end
@@ -58,7 +47,7 @@ class ComputerAiAlgorithm
     winner = @game_status.check_status(board_copy)
     return score_tile(board_copy, depth, winner) if winner != :none
 
-    best_score = Infinity * negamod
+    best_score = INFINITY * negamod
     board_copy.available_tiles.each do |tile|
       score = negamax(board_copy, tile[:square], depth - 1, opponent(owner), -negamod)
       best_score = score if score * negamod < best_score * negamod

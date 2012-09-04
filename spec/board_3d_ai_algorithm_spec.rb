@@ -7,9 +7,9 @@ describe Board3dAiAlgorithm do
   let(:board) { GameBoard3d.new }
 
   describe "When choosing the computers move" do
-
     describe "When a winning move is available" do
       it "takes the winning move" do
+        board.apply_move(:player, "1")
         board.apply_move(:computer, "2")
         board.apply_move(:computer, "11")
         result = ai.calculate(board)
@@ -19,6 +19,7 @@ describe Board3dAiAlgorithm do
 
     describe "When asking for the computers first move" do
       it "returns the center tile" do
+        board.apply_move(:player, "1")
         result = ai.calculate(board)
         result.should == "14"
       end

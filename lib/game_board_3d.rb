@@ -72,83 +72,53 @@ class GameBoard3d
   end
 
   def for_display
-    t1 = tile_display_for_potential_multi_digits("1")
-    t2 = tile_display_for_potential_multi_digits("2")
-    t3 = tile_display_for_potential_multi_digits("3")
-    t4 = tile_display_for_potential_multi_digits("4")
-    t5 = tile_display_for_potential_multi_digits("5")
-    t6 = tile_display_for_potential_multi_digits("6")
-    t7 = tile_display_for_potential_multi_digits("7")
-    t8 = tile_display_for_potential_multi_digits("8")
-    t9 = tile_display_for_potential_multi_digits("9")
-    t10 = tile_display_for_potential_multi_digits("10")
-    t11 = tile_display_for_potential_multi_digits("11")
-    t12 = tile_display_for_potential_multi_digits("12")
-    t13 = tile_display_for_potential_multi_digits("13")
-    t14 = tile_display_for_potential_multi_digits("14")
-    t15 = tile_display_for_potential_multi_digits("15")
-    t16 = tile_display_for_potential_multi_digits("16")
-    t17 = tile_display_for_potential_multi_digits("17")
-    t18 = tile_display_for_potential_multi_digits("18")
-    t19 = tile_display_for_potential_multi_digits("19")
-    t20 = tile_display_for_potential_multi_digits("20")
-    t21 = tile_display_for_potential_multi_digits("21")
-    t22 = tile_display_for_potential_multi_digits("22")
-    t23 = tile_display_for_potential_multi_digits("23")
-    t24 = tile_display_for_potential_multi_digits("24")
-    t25 = tile_display_for_potential_multi_digits("25")
-    t26 = tile_display_for_potential_multi_digits("26")
-    t27 = tile_display_for_potential_multi_digits("27")
-
-    board = "#{t1}"
-
     board = ""
     board += "                            \n"
     board += "               /      /     \n"
-    board += "          #{t1}   /   #{t2}  /   #{t3}  \n"
+    board += "         #{t("1")}   /  #{t("2")}  /  #{t("3")}  \n"
     board += "             /      /       \n"
     board += "      ------ ------ -----   \n"
     board += "           /      /         \n"
-    board += "       #{t4}  /   #{t5}  /   #{t6}      \n"
+    board += "      #{t("4")}  /  #{t("5")}  /  #{t("6")}      \n"
     board += "         /      /           \n"
     board += "  ------ ------ ------      \n"
     board += "       /      /             \n"
-    board += "   #{t7}  /   #{t8}  /   #{t9}          \n"
+    board += "  #{t("7")}  /  #{t("8")}  /  #{t("9")}          \n"
     board += "     /      /               \n"
     board += "               /      /     \n"
-    board += "          #{t10}  /  #{t11}  /  #{t12}  \n"
+    board += "          #{t("10")}  /  #{t("11")}  /  #{t("12")}  \n"
     board += "             /      /       \n"
     board += "      ------ ------ -----   \n"
     board += "           /      /         \n"
-    board += "      #{t13}  /  #{t14}  /  #{t15}      \n"
+    board += "      #{t("13")}  /  #{t("14")}  /  #{t("15")}      \n"
     board += "         /      /           \n"
     board += "  ------ ------ ------      \n"
     board += "       /      /             \n"
-    board += "   #{t16} /  #{t17}  /  #{t18}          \n"
+    board += "   #{t("16")} /  #{t("17")}  /  #{t("18")}          \n"
     board += "     /      /               \n"
     board += "               /      /     \n"
-    board += "          #{t19}  /  #{t20}  /  #{t21}  \n"
+    board += "          #{t("19")}  /  #{t("20")}  /  #{t("21")}  \n"
     board += "             /      /       \n"
     board += "      ------ ------ -----   \n"
     board += "           /      /         \n"
-    board += "      #{t22}  /  #{t23}  /  #{t24}      \n"
+    board += "      #{t("22")}  /  #{t("23")}  /  #{t("24")}      \n"
     board += "         /      /           \n"
     board += "  ------ ------ ------      \n"
     board += "       /      /             \n"
-    board += "  #{t25}  /  #{t26}  /  #{t27}          \n"
+    board += "  #{t("25")}  /  #{t("26")}  /  #{t("27")}          \n"
     board += "     /      /               \n"
     board += "                            \n"
 
     board
   end
 
+  def t(square)
+    tile_display_for_potential_multi_digits(square)
+  end
+
   def tile_display_for_potential_multi_digits(square)
-    display_value = tile_display(square)
-
-    if(get_tile_owner(square) != :none && square.to_i > 9)
-      display_value = " " + display_value
-    end
-
-    display_value
+    # NOTE: hrm... don't like local variables?
+    return  " " + tile_display(square) if tile_display(square).length == 1
+    tile_display(square)
   end
 end

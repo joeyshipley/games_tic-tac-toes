@@ -1,4 +1,8 @@
+require "algorithms/board_algorithm"
+
 class Board3dAiAlgorithm
+  include BoardAlgorithm
+
   attr_accessor :move_set
 
   def initialize(game_status_algorithm)
@@ -6,34 +10,33 @@ class Board3dAiAlgorithm
     @move_set = []
   end
 
-  # refactor: clean up, to tired to look at this more tonight.
   def calculate(board)
-    @winning_tile = "0"
-
-    available_tiles = board.available_tiles
-    available_tiles.each do |tile|
-      board.apply_move(:computer, tile[:square])
-      winner = @game_status.check_status(board)
-      @winning_tile = tile[:square] if winner == :computer
-      board.apply_move(:none, tile[:square])
-    end
-
-    return @winning_tile unless @winning_tile.eql? "0"
+    determine_move_set(board) if @move_set.empty?
+    winning_move = determine_winning_move(board)
+    return winning_move unless winning_move.nil?
     return board.center_tile if board.get_tile_owner(board.center_tile) == :none
-
-    determine_move_set(board)
-    @move_set.each do |choice|
-      return choice if board.is_tile_available(choice)
-    end
-
-    return @move_set[0]
+    return determine_move_from_set(board)
   end
 
   private
 
+  def determine_winning_move(board)
+    board.available_tiles.each do |tile|
+      board_copy = copy(board, :computer, tile[:square])
+      winner = @game_status.check_status(board_copy)
+      return tile[:square] if winner == :computer
+    end
+    nil
+  end
+
+  def determine_move_from_set(board)
+    @move_set.each do |choice|
+      return choice if board.is_tile_available(choice)
+    end
+  end
+
   def determine_move_set(board)
-    return unless @move_set.length == 0
-    player_tile = board.tiles.find { |tile| tile[:owner] == :player }[:square]
+    player_tile = board.get_player_tiles[0][:square]
     case player_tile
     # corners : top/middle
     when "1", "7", "10", "16"
