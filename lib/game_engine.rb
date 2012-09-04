@@ -1,13 +1,11 @@
 require 'game_runner'
+require 'game_runner_factory'
 require 'console_interface'
-require 'game_board_2d'
-require 'game_board_3d'
 require 'algorithms/game_status_algorithm'
-require 'algorithms/computer_ai_algorithm'
-require 'algorithms/board_3d_ai_algorithm'
 
 class GameEngine
   def initialize
+    @game_runner_factory = GameRunnerFactory.new
     @interface = ConsoleInterface.new
     @players = [ :player, :computer ]
     @game_status = GameStatusAlgorithm.new(@players)
@@ -53,18 +51,12 @@ class GameEngine
     return build_runner_for_3d if     choice == "3"
   end
 
-  # refactor these two methods into a GameRunner factory? SRP vs Simple Design
   def build_runner_for_2d
-    board = GameBoard2d.new
-    ai = ComputerAiAlgorithm.new(@game_status)
-    return GameRunner.new(@interface, board, @players, @game_status, ai)
+    @game_runner_factory.create_2d(@interface, @players, @game_status)
   end
 
   def build_runner_for_3d
-    board = GameBoard3d.new
-    ai = Board3dAiAlgorithm.new(@game_status)
-    board.apply_move(:computer, board.center_tile)
-    return GameRunner.new(@interface, board, @players, @game_status, ai)
+    @game_runner_factory.create_3d(@interface, @players, @game_status)
   end
 
   def output(message)
