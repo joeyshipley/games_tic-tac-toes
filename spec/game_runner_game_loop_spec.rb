@@ -65,12 +65,8 @@ describe GameRunner do
   describe "When the game ends" do
     it "lets us know that the game has ended" do
       game_status.set_actions_taken_before_winner(1)
-      message = nil
-      runner.stub(:output) do |arg|
-          message = arg
-      end
+      runner.should_receive(:display_game_over).at_least(1)
       runner.start
-      message.should == "Game Over!"
     end
   end
 end

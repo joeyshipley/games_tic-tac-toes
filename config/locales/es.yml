@@ -3,6 +3,8 @@ messages:
   choose_game_type: "Elige tu juego de mesa: [Cualquier tecla] juego en 2D o [3] juego 3D:"
   invalid_move: "Lo siento, eso fue una eleccion valida. Por favor, intentelo de nuevo."
   already_taken: "Lo sentimos, el movimiento ya ha sido tomada."
+  computer_thinking: "El equipo está pensando ..."
   player_won: "El jugador ha ganado la partida."
   computer_won: "El equipo ha ganado la partida."
   game_draw: "El juego era un empate."
+  game_over: "Game Over!"

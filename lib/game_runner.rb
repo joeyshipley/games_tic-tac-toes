@@ -17,7 +17,7 @@ class GameRunner
     end
     output display_board
     output display_winner
-    output "Game Over!"
+    output display_game_over
   end
 
   def perform_turn
@@ -51,6 +51,7 @@ class GameRunner
   end
 
   def perform_computer_action
+    output t.messages.computer_thinking
     computer_choice = @ai.calculate(@board)
     @board.apply_move(:computer, computer_choice)
   end
@@ -103,5 +104,9 @@ class GameRunner
     return t.messages.player_won if @winner == :player
     return t.messages.computer_won if @winner == :computer
     return t.messages.game_draw if @winner == :draw
+  end
+
+  def display_game_over
+    return t.messages.game_over
   end
 end

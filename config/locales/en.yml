@@ -4,6 +4,8 @@ messages:
   choose_move: "Please choose a move:"
   invalid_move: "Sorry, that was an invalid choice. Please try again."
   already_taken: "Sorry, that move has already been taken. Please try again."
+  computer_thinking: "The computer is thinking..."
   player_won: "The player has won the game"
   computer_won: "The computer has won the game."
   game_draw: "Game was a tie."
+  game_over: "Game Over!"
