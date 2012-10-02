@@ -17,6 +17,7 @@ class GameRunner
     end
     output display_board
     output display_winner
+    output "Game Over!"
   end
 
   def perform_turn

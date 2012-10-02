@@ -4,9 +4,9 @@ require 'console_interface'
 require 'algorithms/game_status_algorithm'
 
 class GameEngine
-  def initialize
+  def initialize(input_interface)
     @game_runner_factory = GameRunnerFactory.new
-    @interface = ConsoleInterface.new
+    @interface = input_interface
     @players = [ :player, :computer ]
     @game_status = GameStatusAlgorithm.new(@players)
   end

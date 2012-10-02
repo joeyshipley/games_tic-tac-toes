@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GameEngine do
 
-  let(:engine) { GameEngine.new }
+  let(:engine) { GameEngine.new(ConsoleInterface.new) }
   let!(:runner) { double("game_runner") }
   let!(:board3d) { GameBoard3d.new }
 
